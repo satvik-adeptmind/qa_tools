@@ -1,0 +1,9 @@
+# configs/lenovolas.yaml
+shop_id: "lenovolas_es"
+input_csv_path: "inputs/lenovolas_keywords.csv"
+output_filename_base: "outputs/lenovolas_new"
+num_output_files: 3
+api_settings: {result_size: 300, processing_batch_size: 150, sleep_between_batches: 5, timeout_seconds: 30}
+retry_settings: {max_retries: 5, initial_backoff: 2}
+parser_settings:
+  fields_to_extract: ["name", "advertisercategory", "processor", "operatingsystem", "display", "graphics", "memory", "harddrive", "battery", "fingerprintreader", "color", "formfactor"]

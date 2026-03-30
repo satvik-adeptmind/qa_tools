@@ -1,0 +1,7 @@
+# configs/dillards.yaml
+shop_id: "thesolesupplier"
+input_csv_path: "inputs/thesolesupplier.csv"
+output_filename_base: "outputs/thesolesupplier"
+num_output_files: 2
+api_settings: {result_size: 50, processing_batch_size: 150, sleep_between_batches: 5, timeout_seconds: 30}
+retry_settings: {max_retries: 5, initial_backoff: 2}

@@ -1,0 +1,9 @@
+# configs/jdwilliams.yaml
+shop_id: "jdwilliams"
+input_csv_path: "inputs/jdwilliams_keywords.csv"
+output_filename_base: "outputs/test_jd"
+num_output_files: 17
+api_settings: {result_size: 300, processing_batch_size: 150, sleep_between_batches: 5, timeout_seconds: 30}
+retry_settings: {max_retries: 5, initial_backoff: 2}
+parser_settings:
+  fields_to_extract: ["title", "description", "product_type", "color", "material"]

@@ -1,0 +1,11 @@
+# configs/jcrew.yaml
+shop_id: "jcrew"
+input_csv_path: "inputs/jcrew_keywords.csv"
+output_filename_base: "outputs/jcrew_results"
+num_output_files: 2
+api_settings: {result_size: 300, processing_batch_size: 150, sleep_between_batches: 5, timeout_seconds: 30}
+retry_settings: {max_retries: 5, initial_backoff: 2}
+parser_settings:
+  force_exploding_variants: false
+  lily_keys_to_extract: ["lily_embellishments", "lily_fabric_content", "lily_fit", "lily_heel_height", "lily_length", "lily_material", "lily_neck_style", "lily_occasion", "lily_pattern_prints", "lily_rise", "lily_sleeve_length", "lily_sleeve_style", "lily_strap_detail", "lily_stretch", "lily_style"]
+

@@ -1,0 +1,7 @@
+# configs/simplybe.yaml
+shop_id: "simplybe"
+input_csv_path: "inputs/simplybe_keywords.csv"
+output_filename_base: "outputs/simplybe"
+num_output_files: 2
+api_settings: {result_size: 300, processing_batch_size: 150, sleep_between_batches: 5, timeout_seconds: 30}
+retry_settings: {max_retries: 5, initial_backoff: 2}

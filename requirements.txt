@@ -1,0 +1,10 @@
+streamlit
+pandas
+aiohttp
+tenacity
+nest_asyncio
+matplotlib
+requests
+pyyaml
+tqdm
+openai

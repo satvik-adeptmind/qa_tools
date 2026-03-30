@@ -1,0 +1,7 @@
+# configs/loft.yaml
+shop_id: "loft"
+input_csv_path: "inputs/loft.csv"
+output_filename_base: "outputs/loft"
+num_output_files: 1
+api_settings: {result_size: 300, processing_batch_size: 150, sleep_between_batches: 5, timeout_seconds: 30}
+retry_settings: {max_retries: 5, initial_backoff: 2}

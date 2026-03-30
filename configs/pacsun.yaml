@@ -1,0 +1,20 @@
+shop_id: "pacsun_en_us"
+api_settings:
+  result_size: 300
+  processing_batch_size: 150
+  sleep_between_batches: 5
+  timeout_seconds: 30
+retry_settings:
+  max_retries: 5
+  initial_backoff: 2
+parser_settings:
+  fields_to_extract:
+    - title
+    - description
+    - gender
+    - age
+    - color
+    - pattern
+    - SLEEVE_TYPE
+    - NECKLINE
+    - FABRIC

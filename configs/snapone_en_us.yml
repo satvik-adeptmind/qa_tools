@@ -1,0 +1,7 @@
+# configs/snapone_en_us.yml
+shop_id: "snapone_en_us"
+input_csv_path: "inputs/snapone_en_us_keywords.csv"
+output_filename_base: "outputs/snapone_en_us"
+num_output_files: 2
+api_settings: {result_size: 25, processing_batch_size: 150, sleep_between_batches: 5, timeout_seconds: 30}
+retry_settings: {max_retries: 5, initial_backoff: 2}
