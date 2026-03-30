@@ -12,7 +12,7 @@ def validate_title_llm(client, title, model="gpt-4o-mini"):
     Title: "{title}"
     
     Criteria for Validation:
-    1. Conservative Pluralization: Only pluralize if it is grammatically essential or significantly improves clarity (e.g., 'Shirts' vs 'Shirt'). Do NOT force pluralization if the singular form is acceptable.
+    1. Standard Pluralization: Product landing page titles should generally be plural (e.g., 'Pink Shirts', 'Nike Shoes'). If a title is singular but refers to a category of products, mark it as an ISSUE and suggest the plural form (e.g., 'pink shirt' -> 'pink shirts') unless the item is naturally singular (e.g., 'Apple Watch').
     2. No Added Words: Never add new words that aren't in the original title or implied by the brand name.
     3. Brand Accuracy: Ensure brands are formatted correctly according to your database (e.g., 'GOAT' not 'G.O.A.T', 'Nike' capitalized).
     4. Essential Errors Only: Focus on fixing typos, brand misspellings, or weird artifacts. Do not make purely stylistic changes that alter the search intent.
