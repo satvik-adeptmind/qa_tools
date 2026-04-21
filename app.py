@@ -34,7 +34,7 @@ TOOL_REGISTRY = {
         {"name": "🔗 URL QA & Cleaner", "func": render_url_qa},
         {"name": "✅ Keyword Validator", "func": render_keyword_validator},
         {"name": "🎨 Color Identifier", "func": render_color_identifier},
-        {"name": "📝 Title Validator (LLM)", "func": render_title_validator},
+        {"name": "📝 Pluralization", "func": render_title_validator},
     ],
 }
 

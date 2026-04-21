@@ -7,4 +7,6 @@ matplotlib
 requests
 pyyaml
 tqdm
-openai
+spacy
+lemminflect
+inflect

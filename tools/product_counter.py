@@ -155,7 +155,14 @@ def render_product_counter():
                 st.session_state.pc_df_from_paste = pd.DataFrame({"Keyword": keywords})
                 st.info(f"Detected {len(st.session_state.pc_df_from_paste)} keywords.")
 
-    active_df = st.session_state.get("pc_df_from_csv", st.session_state.get("pc_df_from_paste"))
+    csv_df = st.session_state.get("pc_df_from_csv")
+    paste_df = st.session_state.get("pc_df_from_paste")
+    active_df = None
+    if isinstance(csv_df, pd.DataFrame) and not csv_df.empty:
+        active_df = csv_df
+    elif isinstance(paste_df, pd.DataFrame) and not paste_df.empty:
+        active_df = paste_df
+
     if st.button("🚀 Fetch Product Counts", disabled=(active_df is None), key="pc_fetch_btn"):
         with st.spinner("Fetching counts..."):
             results = asyncio.run(main_async_fetcher(active_df, base_url, on_sale_mode))

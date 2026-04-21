@@ -178,11 +178,11 @@ def render_home():
 
     with col4:
         st.button(
-            "**📝 Title Validator (LLM)**  \nValidate landing page titles for correct pluralization and brand matching (e.g. 'GOAT' vs 'G.O.A.T') using AI analysis.", 
+            "**📝 Pluralization**  \nPluralize dynamic landing page keywords from paste or CSV using local NLP (spaCy + inflection). Outputs `original_keyword` and `pluralized_keyword` for every row.", 
             key="btn_tv", 
             use_container_width=True,
             on_click=set_page,
-            args=("📝 Title Validator (LLM)",)
+            args=("📝 Pluralization",)
         )
 
 
