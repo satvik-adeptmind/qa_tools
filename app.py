@@ -8,7 +8,13 @@ from tools.data_fetcher import render_data_fetcher
 from tools.url_qa import render_url_qa
 from tools.keyword_validator import render_keyword_validator
 from tools.color_identifier import render_color_identifier
-from tools.title_validator import render_title_validator
+
+
+def render_title_validator_lazy():
+    # Lazy import to avoid heavy NLP imports affecting global app startup.
+    from tools.title_validator import render_title_validator
+
+    render_title_validator()
 
 # ============================================================
 # TOOL REGISTRY
@@ -34,7 +40,7 @@ TOOL_REGISTRY = {
         {"name": "🔗 URL QA & Cleaner", "func": render_url_qa},
         {"name": "✅ Keyword Validator", "func": render_keyword_validator},
         {"name": "🎨 Color Identifier", "func": render_color_identifier},
-        {"name": "📝 Pluralization", "func": render_title_validator},
+        {"name": "📝 Pluralization", "func": render_title_validator_lazy},
     ],
 }
 
@@ -62,26 +68,24 @@ with st.sidebar:
 
     # 1. Tool Selection at the very top
     st.subheader("Navigation")
-    
-    # We create grouped options manually for the selectbox by adding disabled header options
-    # Streamlit doesn't support selectbox groups natively, so another approach is to just list them
-    # but the user requested: "i'd prefer the switchable areas to be first in the left side panel"
+
+    # Only real tools are selectable. Category labels are shown below as static text.
     options = ["🏠 Home"]
-    for category, tools in TOOL_REGISTRY.items():
-        options.append(f"── {category} ──")
+    for _, tools in TOOL_REGISTRY.items():
         for tool in tools:
             options.append(tool["name"])
-            
+
     selected = st.selectbox(
         "Select Tool",
         options,
         label_visibility="collapsed",
         key="nav_selection",
     )
-    
-    # If the user selects a header, default to Home
-    if selected.startswith("── "):
-        selected = "🏠 Home"
+
+    st.caption("Categories")
+    for category, tools in TOOL_REGISTRY.items():
+        tool_names = ", ".join(tool["name"] for tool in tools)
+        st.markdown(f"**{category}:** {tool_names}")
 
 # ============================================================
 # MAIN CONTENT AREA
@@ -93,11 +97,6 @@ if "nav_selection" not in st.session_state:
 
 # Let the selectbox drive the state
 selected = st.session_state.nav_selection
-
-# Handle separator labels (non-clickable category headers)
-if selected.startswith("── "):
-    st.session_state.nav_selection = "🏠 Home"
-    st.rerun()
 
 # --- RENDER THE SELECTED TOOL ---
 if selected in nav_lookup:

@@ -54,6 +54,8 @@ class PluralizationTests(unittest.TestCase):
             "nike shoe": "nike shoes",
             "women dress": "women dresses",
             "kids toy": "kids toys",
+            "shoe for boys": "shoes for boys",
+            "watch with strap": "watches with strap",
         }
         for src, expected in cases.items():
             with self.subTest(src=src):

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
+from src.core.endpoints import build_search_url
 
-BASE_URL = "https://search-prod-dlp-adept-search.search-prod.adeptmind.app/search"
 
 class BaseParser(ABC):
     """Abstract Base Class defining the interface for all retailer-specific parsers."""
@@ -9,10 +9,12 @@ class BaseParser(ABC):
 
     def build_request(self, search_keyword):
         """
-        Default request builder. Uses the centralized BASE_URL.
+        Default request builder. Uses centralized endpoint resolver.
         Can be overridden by subclasses if a retailer has a unique URL structure.
         """
-        url_with_shop = f"{BASE_URL}?shop_id={self.config['shop_id']}"
+        environment = self.config.get("environment", "prod")
+        secrets = self.config.get("secrets")
+        url_with_shop = build_search_url(environment=environment, shop_id=self.config["shop_id"], secrets=secrets)
         payload = {
             "query": search_keyword,
             "size": self.config['api_settings']['result_size'],

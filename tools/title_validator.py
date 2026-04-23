@@ -80,6 +80,26 @@ PLURAL_INVARIANT_SUFFIXES = tuple(
     str(s).strip().lower() for s in _RULES.get("invariant_suffixes", []) if str(s).strip()
 )
 
+NON_TARGET_WORDS = {
+    "a",
+    "an",
+    "and",
+    "as",
+    "at",
+    "by",
+    "for",
+    "from",
+    "in",
+    "into",
+    "of",
+    "on",
+    "or",
+    "the",
+    "to",
+    "with",
+    "without",
+}
+
 _INFLECT_ENGINE = inflect.engine() if _HAS_INFLECT else None
 _NLP = None
 _HAS_TAGGER = False
@@ -209,11 +229,24 @@ def _select_fallback_token(cleaned: str):
     if not matches:
         return None
 
-    if _is_blocklisted(matches[-1].group(0)):
+    # If phrase has connectors (e.g., "shoe for boys"), prioritize the segment before them.
+    split_idx = None
+    for idx, m in enumerate(matches):
+        if m.group(0).lower() in NON_TARGET_WORDS and idx > 0:
+            split_idx = idx
+            break
+
+    search_matches = matches[:split_idx] if split_idx is not None else matches
+    if not search_matches:
+        search_matches = matches
+
+    if _is_blocklisted(search_matches[-1].group(0)):
         return None
 
-    for m in reversed(matches):
+    for m in reversed(search_matches):
         token = m.group(0)
+        if token.lower() in NON_TARGET_WORDS:
+            continue
         if _is_blocklisted(token):
             continue
         if _is_likely_plural(token):
@@ -233,6 +266,8 @@ def _select_nlp_token(doc):
 
     def pick_from(tokens):
         for token in reversed(tokens):
+            if token.text.lower() in NON_TARGET_WORDS:
+                continue
             if _is_blocklisted(token.text):
                 continue
             if _HAS_TAGGER and token.tag_ in {"NNS", "NNPS"}:

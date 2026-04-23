@@ -4,6 +4,7 @@ import json
 import pandas as pd
 from collections import Counter
 import re
+from src.core.endpoints import build_search_url
 
 
 def run_analysis(shop_id, environment, search_keyword, check_groups, match_types, result_size):
@@ -11,11 +12,6 @@ def run_analysis(shop_id, environment, search_keyword, check_groups, match_types
     Performs a search API call and analyzes the results for relevance.
     Also formats product data for external LLM analysis.
     """
-    if environment == "staging":
-        url = f"https://search-pre-prod-dlp-adept-search.search-pre-prod.adeptmind.app/search?shop_id={shop_id}"
-    else:
-        url = f"https://search-prod-dlp-adept-search.search-prod.adeptmind.app/search?shop_id={shop_id}"
-
     headers = {"Content-Type": "application/json"}
     payload = {
         "query": search_keyword,
@@ -24,6 +20,7 @@ def run_analysis(shop_id, environment, search_keyword, check_groups, match_types
     }
 
     try:
+        url = build_search_url(environment=environment, shop_id=shop_id, secrets=st.secrets)
         response = requests.post(url, headers=headers, data=json.dumps(payload), timeout=30)
         response.raise_for_status()
 
@@ -101,6 +98,8 @@ description: {description}"""
         return {"status": "error", "message": f"API Error (Status Code: {e.response.status_code}): {e.response.text}"}
     except requests.exceptions.RequestException as e:
         return {"status": "error", "message": f"Network Error: Could not connect to the API. Details: {e}"}
+    except ValueError as e:
+        return {"status": "error", "message": f"Endpoint configuration error: {e}"}
     except Exception as e:
         return {"status": "error", "message": f"An unexpected error occurred: {e}"}
 

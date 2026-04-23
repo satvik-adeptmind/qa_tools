@@ -7,6 +7,7 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_i
 import time
 import random
 import nest_asyncio
+from src.core.endpoints import build_search_url
 
 nest_asyncio.apply()
 
@@ -113,7 +114,15 @@ def render_product_counter():
             key="pc_on_sale",
         )
 
-    base_url = f"https://search-{'prod' if environment == 'prod' else 'pre-prod'}-dlp-adept-search.search-{environment}.adeptmind.app/search?shop_id={shop_id}"
+    try:
+        base_url = build_search_url(environment=environment, shop_id=shop_id, secrets=st.secrets)
+    except Exception as e:
+        st.error(f"Endpoint configuration error: {e}")
+        st.info(
+            "Set Streamlit secrets [api_endpoints] search_prod_endpoint/search_staging_endpoint "
+            "or env vars ADEPT_SEARCH_PROD_ENDPOINT/ADEPT_SEARCH_STAGING_ENDPOINT."
+        )
+        return
 
     tab1, tab2 = st.tabs(["📁 Upload CSV", "📋 Paste Keywords"])
 

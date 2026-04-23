@@ -7,6 +7,7 @@ matplotlib
 requests
 pyyaml
 tqdm
-spacy
-lemminflect
-inflect
+spacy==3.8.14
+lemminflect==0.2.3
+inflect==7.5.0
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl

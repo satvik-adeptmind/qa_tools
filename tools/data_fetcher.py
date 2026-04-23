@@ -145,7 +145,7 @@ def create_zip_file(file_paths):
     return zip_buffer
 
 
-def run_orchestrator(keywords, retailer_name, num_output_files):
+def run_orchestrator(keywords, retailer_name, num_output_files, environment):
     """Runs the BatchOrchestrator with the given inputs."""
     config = None
     # Look for config relative to this file's parent (qa_tools root)
@@ -168,6 +168,8 @@ def run_orchestrator(keywords, retailer_name, num_output_files):
     config["output_filename_base"] = f"{retailer_name}_results"
     config["num_output_files"] = num_output_files
     config["input_csv_path"] = None
+    config["environment"] = environment
+    config["secrets"] = st.secrets
 
     ParserClass = RETAILER_PARSERS[retailer_name]
     data_parser = ParserClass(config)
@@ -203,6 +205,7 @@ def render_data_fetcher():
     retailer_name = st.selectbox(
         "Select Retailer", options=list(RETAILER_PARSERS.keys()), key="df_retailer"
     )
+    environment = st.selectbox("Environment", options=["prod", "staging"], index=0, key="df_env")
     keywords_input = st.text_area("Paste Keywords (one per line)", key="df_keywords")
     num_output_files = st.number_input(
         "Number of Output Files", min_value=1, value=1, step=1, key="df_num_files"
@@ -226,10 +229,18 @@ def render_data_fetcher():
             st.info(f"Processing {len(keywords)} keywords for retailer '{retailer_name}'...")
 
             try:
-                output_files, temp_dir_obj = run_orchestrator(keywords, retailer_name, num_output_files)
+                output_files, temp_dir_obj = run_orchestrator(
+                    keywords, retailer_name, num_output_files, environment
+                )
                 st.session_state.df_output_files = output_files
                 st.session_state.df_output_dir = temp_dir_obj
                 st.rerun()
+            except ValueError as e:
+                st.error(f"Endpoint configuration error: {e}")
+                st.info(
+                    "Set Streamlit secrets [api_endpoints] search_prod_endpoint/search_staging_endpoint "
+                    "or env vars ADEPT_SEARCH_PROD_ENDPOINT/ADEPT_SEARCH_STAGING_ENDPOINT."
+                )
             except Exception as e:
                 st.error(f"An error occurred: {e}")
                 if st.session_state.df_output_dir:
